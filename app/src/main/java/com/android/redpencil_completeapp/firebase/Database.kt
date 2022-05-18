@@ -7,6 +7,7 @@ import com.google.firebase.database.*
 class Database() {
 private val firebaseDatabase : FirebaseDatabase
 private val messagesDatabaseReference : DatabaseReference
+private val fireba
 
 //Initializer Block.
     init {
@@ -22,7 +23,9 @@ private val messagesDatabaseReference : DatabaseReference
 
         val msgChildEventListener : ChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                var msg : Message? = snapshot.getValue(Message::class.java)
+                //!! Null safety operator.
+                var msg : Message = snapshot.getValue(Message::class.java)!!
+                messageList.add(msg)
                 messageAdapter.notifyItemInserted(messageList.size - 1)
             }
 
