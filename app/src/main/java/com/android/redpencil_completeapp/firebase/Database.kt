@@ -72,6 +72,9 @@ private val msgImageReference : StorageReference
         recyclerView: RecyclerView
     ) : Unit {
 
+        if (messageList.isEmpty())
+            progressBar.visibility = View.GONE
+
         val msgChildEventListener : ChildEventListener = object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 //!! Null safety operator.
