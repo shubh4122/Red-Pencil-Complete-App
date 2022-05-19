@@ -1,5 +1,6 @@
 package com.android.redpencil_completeapp.ui
 
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         msgViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         messageList = ArrayList()
 
+        val sharedPrefs : SharedPreferences = getSharedPreferences("username", MODE_PRIVATE)
+        val userName : String = sharedPrefs.getString("name", "")!!
+
         setupRecyclerViewAndAdapter()
 
         msgViewModel.readMessage(messageList, messageAdapter, progressBar, recyclerView)
@@ -48,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 ActivityResultCallback<Uri>(){
                     val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
                     val timeOfMessage : String = sdf.format(Date())
-                    msgViewModel.addPhoto(it, timeOfMessage, progressBar)
+                    msgViewModel.addPhoto(it, timeOfMessage, progressBar, userName)
             })
 
         msgPhotoPickerImageView.setOnClickListener(View.OnClickListener {
@@ -62,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                 val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
                 val timeOfMessage : String = sdf.format(Date())
 
-                var msg : Message = Message(messageEditText.text.toString(), "SENDER_NAME via Auth", null, timeOfMessage)
+                var msg : Message = Message(messageEditText.text.toString(), userName, null, timeOfMessage)
                 msgViewModel.addMessage(msg)
 
                 messageEditText.setText("")

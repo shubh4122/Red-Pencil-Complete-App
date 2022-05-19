@@ -34,7 +34,12 @@ private val msgImageReference : StorageReference
         messagesDatabaseReference.push().setValue(message)
     }
 
-    public fun addPhoto(uriSelectedImage: Uri, timeOfMessage: String, progressBar: ProgressBar) {
+    public fun addPhoto(
+        uriSelectedImage: Uri,
+        timeOfMessage: String,
+        progressBar: ProgressBar,
+        userName: String
+    ) {
         //Upload File to Storage
         val photoRef : StorageReference = msgImageReference.child(uriSelectedImage.lastPathSegment!!)
         val uploadTask : UploadTask = photoRef.putFile(uriSelectedImage)
@@ -50,7 +55,7 @@ private val msgImageReference : StorageReference
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val downloadUri = task.result
-                val message = Message(null, "SENDER", downloadUri.toString(), timeOfMessage)
+                val message = Message(null, userName, downloadUri.toString(), timeOfMessage)
                 messagesDatabaseReference.push().setValue(message)
             }
             else {
