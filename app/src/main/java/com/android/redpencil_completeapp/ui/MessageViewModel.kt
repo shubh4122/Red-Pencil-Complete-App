@@ -1,7 +1,10 @@
 package com.android.redpencil_completeapp.ui
 
 import android.app.Application
+import android.net.Uri
+import android.widget.ProgressBar
 import androidx.lifecycle.AndroidViewModel
+import androidx.recyclerview.widget.RecyclerView
 import com.android.redpencil_completeapp.adapter.MessageAdapter
 import com.android.redpencil_completeapp.firebase.Database
 import com.android.redpencil_completeapp.models.Message
@@ -14,7 +17,16 @@ class MessageViewModel(application: Application) : AndroidViewModel(application)
         msgDatabase.addMessage(msg)
     }
 
-    public fun readMessage(msgList: ArrayList<Message>, msgAdapter: MessageAdapter) {
-        msgDatabase.readMessage(msgList, msgAdapter)
+    public fun addPhoto(uri: Uri, timeOfMessage: String) {
+        msgDatabase.addPhoto(uri, timeOfMessage)
+    }
+
+    public fun readMessage(
+        msgList: ArrayList<Message>,
+        msgAdapter: MessageAdapter,
+        progressBar: ProgressBar,
+        recyclerView: RecyclerView
+    ) {
+        msgDatabase.readMessage(msgList, msgAdapter, progressBar, recyclerView)
     }
 }

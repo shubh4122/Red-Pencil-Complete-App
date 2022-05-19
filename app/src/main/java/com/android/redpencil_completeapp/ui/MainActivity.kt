@@ -1,15 +1,13 @@
 package com.android.redpencil_completeapp.ui
 
-import android.app.Activity
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,17 +36,20 @@ class MainActivity : AppCompatActivity() {
         var messageEditText : EditText = findViewById(R.id.messageEditText)
         val msgPhotoPickerImageView : ImageView = findViewById(R.id.photoPickerButton)
         val sendBtn : Button = findViewById(R.id.sendButton)
+        val progressBar : ProgressBar = findViewById(R.id.progressBar)
         val msgViewModel : MessageViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         messageList = ArrayList()
 
         setupRecyclerViewAndAdapter()
 
-        msgViewModel.readMessage(messageList, messageAdapter)
+        msgViewModel.readMessage(messageList, messageAdapter, progressBar, recyclerView)
 
         val msgPhotoPicker : ActivityResultLauncher<String> =
             registerForActivityResult(ActivityResultContracts.GetContent(),
                 ActivityResultCallback<Uri>(){
-                //TODO Push it to storage. Call on for it.
+                    val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
+                    val timeOfMessage : String = sdf.format(Date())
+                    msgViewModel.addPhoto(it, timeOfMessage)
             })
 
         msgPhotoPickerImageView.setOnClickListener(View.OnClickListener {
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
             val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
             val timeOfMessage : String = sdf.format(Date())
 
-            var msg : Message = Message(messageEditText.text.toString(), "SENDER_NAME via Auth", "IMG PIC via storage", timeOfMessage)
+            var msg : Message = Message(messageEditText.text.toString(), "SENDER_NAME via Auth", null, timeOfMessage)
             msgViewModel.addMessage(msg)
 
             messageEditText.setText("")
