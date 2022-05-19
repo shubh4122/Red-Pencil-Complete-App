@@ -1,5 +1,8 @@
 package com.android.redpencil_completeapp.adapter
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +12,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.redpencil_completeapp.R
 import com.android.redpencil_completeapp.models.Message
+import com.android.redpencil_completeapp.ui.MainActivity
 import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
+import java.io.File
+import java.net.URL
 
-class MessageAdapter(private val messageList : ArrayList<Message>) :
+class MessageAdapter(private val messageList : ArrayList<Message>, private val context : Context) :
     RecyclerView.Adapter<MessageAdapter.MessageViewHolder>() {
 
 
@@ -48,9 +55,8 @@ class MessageAdapter(private val messageList : ArrayList<Message>) :
         if (isPhoto) {
             holder.messageTextView.visibility = View.GONE
             holder.messageImageView.visibility = View.VISIBLE
-            Glide.with(holder.messageImageView.context)
-                .load(currentMessage.photoUrl)
-                .into(holder.messageImageView)
+
+            Picasso.get().load(currentMessage.photoUrl).into(holder.messageImageView)
         }
         else {
             holder.messageTextView.visibility = View.VISIBLE

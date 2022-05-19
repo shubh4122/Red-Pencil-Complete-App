@@ -55,35 +55,24 @@ class MainActivity : AppCompatActivity() {
             msgPhotoPicker.launch("image/*")
         })
 
-//        sendBtn.addTextChangedListener(object : TextWatcher {
-//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-//
-//            override fun onTextChanged(msgText: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                if (msgText.toString().trim().isNotEmpty())
-//                    sendBtn.isEnabled
-//                else
-//                    !sendBtn.isEnabled
-//            }
-//
-//            override fun afterTextChanged(p0: Editable?) {}
-//
-//        })
 
         sendBtn.setOnClickListener(View.OnClickListener {
-            val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
-            val timeOfMessage : String = sdf.format(Date())
+            if (messageEditText.text.toString().isNotEmpty()) {
+                val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
+                val timeOfMessage : String = sdf.format(Date())
 
-            var msg : Message = Message(messageEditText.text.toString(), "SENDER_NAME via Auth", null, timeOfMessage)
-            msgViewModel.addMessage(msg)
+                var msg : Message = Message(messageEditText.text.toString(), "SENDER_NAME via Auth", null, timeOfMessage)
+                msgViewModel.addMessage(msg)
 
-            messageEditText.setText("")
+                messageEditText.setText("")
+            }
         })
     }
 
     private fun setupRecyclerViewAndAdapter() {
         recyclerView = findViewById(R.id.msgRecyclerView)
         layoutManager = LinearLayoutManager(this)
-        messageAdapter = MessageAdapter(messageList)
+        messageAdapter = MessageAdapter(messageList, this)
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = messageAdapter
