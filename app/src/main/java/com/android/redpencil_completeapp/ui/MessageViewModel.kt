@@ -17,8 +17,8 @@ class MessageViewModel(application: Application) : AndroidViewModel(application)
         msgDatabase.addMessage(msg)
     }
 
-    public fun addPhoto(uri: Uri, timeOfMessage: String) {
-        msgDatabase.addPhoto(uri, timeOfMessage)
+    public fun addPhoto(uri: Uri, timeOfMessage: String, progressBar: ProgressBar) {
+        msgDatabase.addPhoto(uri, timeOfMessage, progressBar)
     }
 
     public fun readMessage(

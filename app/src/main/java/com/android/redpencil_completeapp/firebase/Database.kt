@@ -3,11 +3,13 @@ package com.android.redpencil_completeapp.firebase
 import android.net.Uri
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.android.redpencil_completeapp.adapter.MessageAdapter
 import com.android.redpencil_completeapp.models.Message
 import com.android.redpencil_completeapp.ui.MainActivity
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -32,7 +34,7 @@ private val msgImageReference : StorageReference
         messagesDatabaseReference.push().setValue(message)
     }
 
-    public fun addPhoto(uriSelectedImage: Uri, timeOfMessage: String) {
+    public fun addPhoto(uriSelectedImage: Uri, timeOfMessage: String, progressBar: ProgressBar) {
         //Upload File to Storage
         val photoRef : StorageReference = msgImageReference.child(uriSelectedImage.lastPathSegment!!)
         val uploadTask : UploadTask = photoRef.putFile(uriSelectedImage)
@@ -55,6 +57,7 @@ private val msgImageReference : StorageReference
                 //Handle Failures
             }
         }
+        progressBar.visibility = View.GONE
     }
 
     public fun readMessage(
@@ -102,24 +105,56 @@ private val msgImageReference : StorageReference
         messageAdapter: MessageAdapter,
         messageList: ArrayList<Message>
     ) {
-        val query : Query = messagesDatabaseReference.orderByChild("messageText").equalTo(
-            messageList[viewClickedId].messageText)
 
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (qSnapshot in snapshot.children ) {
-                    qSnapshot.ref.removeValue()
+        if (messageList[viewClickedId].messageText == null) {
+
+            /**
+             * SEE WHY IS THIS NOT WORKING
+             */
+
+            val storageRef : StorageReference  = firebaseStorage.getReferenceFromUrl(messageList[viewClickedId].photoUrl!!)
+
+            storageRef.delete().addOnSuccessListener { OnSuccessListener<Void> {} }
+
+            val query : Query = messagesDatabaseReference.orderByChild("time").equalTo(messageList[viewClickedId].time!!)
+
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (qSnapshot in snapshot.children ) {
+                        qSnapshot.ref.removeValue()
+
+                        Toast.makeText(messageAdapter.getContext(), "Deleted", Toast.LENGTH_SHORT).show()
+                    }
+
+                    messageList.removeAt(viewClickedId)
+                    messageAdapter.notifyDataSetChanged()
                 }
 
-                messageList.removeAt(viewClickedId)
-                messageAdapter.notifyDataSetChanged()
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+            })
+        }
+        else {
+            val query : Query = messagesDatabaseReference.orderByChild("messageText").equalTo(messageList[viewClickedId].messageText!!)
 
-        })
+            query.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (qSnapshot in snapshot.children ) {
+                        qSnapshot.ref.removeValue()
+                    }
+
+                    messageList.removeAt(viewClickedId)
+                    messageAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+        }
     }
 
 }

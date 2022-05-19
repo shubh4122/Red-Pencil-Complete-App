@@ -69,4 +69,6 @@ class MessageAdapter(private val messageList : ArrayList<Message>, private val c
 
     override fun getItemCount(): Int = messageList.size
 
+    public fun getContext() : Context = context
+
 }

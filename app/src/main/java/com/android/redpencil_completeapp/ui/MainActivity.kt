@@ -48,11 +48,12 @@ class MainActivity : AppCompatActivity() {
                 ActivityResultCallback<Uri>(){
                     val sdf : SimpleDateFormat = SimpleDateFormat("HH:mm")
                     val timeOfMessage : String = sdf.format(Date())
-                    msgViewModel.addPhoto(it, timeOfMessage)
+                    msgViewModel.addPhoto(it, timeOfMessage, progressBar)
             })
 
         msgPhotoPickerImageView.setOnClickListener(View.OnClickListener {
             msgPhotoPicker.launch("image/*")
+            progressBar.visibility = View.VISIBLE
         })
 
 
