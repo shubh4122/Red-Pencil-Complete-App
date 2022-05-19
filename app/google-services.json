@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "655147858168",
+    "project_id": "red-pencil---complete-app",
+    "storage_bucket": "red-pencil---complete-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655147858168:android:f5e4b8b1385b795ec5630d",
+        "android_client_info": {
+          "package_name": "com.android.redpencil_completeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655147858168-3kdmuin87ph7mfjbpf4asid2l985gj1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASRSRdijhlwyJdn8SAGSW4qNqJLk3fKzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655147858168-3kdmuin87ph7mfjbpf4asid2l985gj1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
