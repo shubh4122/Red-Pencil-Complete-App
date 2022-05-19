@@ -3,11 +3,9 @@ package com.android.redpencil_completeapp.ui
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var messageList: ArrayList<Message>
     private lateinit var layoutManager : RecyclerView.LayoutManager
+    private lateinit var msgViewModel : MessageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val msgPhotoPickerImageView : ImageView = findViewById(R.id.photoPickerButton)
         val sendBtn : Button = findViewById(R.id.sendButton)
         val progressBar : ProgressBar = findViewById(R.id.progressBar)
-        val msgViewModel : MessageViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
+        msgViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
         messageList = ArrayList()
 
         setupRecyclerViewAndAdapter()
@@ -88,5 +87,14 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = messageAdapter
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        super.onContextItemSelected(item)
+        when(item.itemId) {
+//            101 -> Toast.makeText(this, "Edit "+item.groupId.toString(), Toast.LENGTH_SHORT).show()
+            102 -> msgViewModel.deleteMessage(item.groupId, messageAdapter, messageList)
+        }
+        return true
     }
 }

@@ -30,7 +30,7 @@ class MessageAdapter(private val messageList : ArrayList<Message>) :
             v: View?,
             menuInfo: ContextMenu.ContextMenuInfo?
         ) {
-            menu?.add(adapterPosition, 101, 0, "Edit")
+//            menu?.add(adapterPosition, 101, 0, "Edit")
             menu?.add(adapterPosition, 102, 1, "Delete")
         }
     }

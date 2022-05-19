@@ -4,7 +4,7 @@ import java.io.Serializable
 
 //null initialization is a way to solve empty constructor necessity
 data class Message(
-    var messageText: String = "",
+    var messageText: String? = "",
     var senderName: String = "",
     var photoUrl: String? = "",
     var time: String = "")

@@ -29,4 +29,12 @@ class MessageViewModel(application: Application) : AndroidViewModel(application)
     ) {
         msgDatabase.readMessage(msgList, msgAdapter, progressBar, recyclerView)
     }
+
+    public fun deleteMessage(
+        viewClickedId: Int,
+        messageAdapter: MessageAdapter,
+        messageList: ArrayList<Message>
+    ) {
+        msgDatabase.deleteMessage(viewClickedId, messageAdapter, messageList)
+    }
 }
